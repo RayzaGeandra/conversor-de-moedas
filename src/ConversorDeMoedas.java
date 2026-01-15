@@ -5,9 +5,13 @@ public class ConversorDeMoedas {
         System.out.println("Seja bem-vindo(a) ao conversor de moedas!");
 
         int opcao;
-        //int entradaDeDados;
+        CodigoMoeda moedaBase = null;
+        CodigoMoeda moedaDestino = null;
+        double valor;
+        double resultado;
 
         Scanner scanner = new Scanner(System.in);
+        ServicoDeCambio servico = new ServicoDeCambio();
         do {
             System.out.println("\n************** CONVERSOR DE MOEDAS ************** \n");
             System.out.println("Escolha a opção desejada: ");
@@ -19,32 +23,38 @@ public class ConversorDeMoedas {
             System.out.println("6) Euro(EUR) -> Dólar(USD)");
             System.out.println("0) Sair");
 
-           // Scanner scanner = new Scanner(System.in);
             opcao = scanner.nextInt();
 
             switch (opcao) {
+
                 case 1:
-                    System.out.println("Conversão BRL → USD selecionada.");
+                    moedaBase = CodigoMoeda.BRL;
+                    moedaDestino = CodigoMoeda.USD;
                     break;
 
                 case 2:
-                    System.out.println("Conversão USD -> BRL selecionada.");
+                    moedaBase = CodigoMoeda.USD;
+                    moedaDestino = CodigoMoeda.BRL;
                     break;
 
                 case 3:
-                    System.out.println("Conversão BRL -> EUR selecionada.");
+                    moedaBase = CodigoMoeda.BRL;
+                    moedaDestino = CodigoMoeda.EUR;
                     break;
 
                 case 4:
-                    System.out.println("Conversão EUR -> BRL selecionada.");
+                    moedaBase = CodigoMoeda.EUR;
+                    moedaDestino = CodigoMoeda.BRL;
                     break;
 
                 case 5:
-                    System.out.println("Conversão USD -> EUR selecionada.");
+                    moedaBase = CodigoMoeda.USD;
+                    moedaDestino = CodigoMoeda.EUR;
                     break;
 
                 case 6:
-                    System.out.println("Conversão EUR -> USD selecionada.");
+                    moedaBase = CodigoMoeda.EUR;
+                    moedaDestino = CodigoMoeda.USD;
                     break;
 
                 case 0:
@@ -53,6 +63,22 @@ public class ConversorDeMoedas {
 
                 default:
                     System.out.println("Por favor, escolha uma opção válida!");
+                    continue; // mantém o loop; usar return encerraria o metodo.
+            }
+
+            if(opcao >= 1 && opcao <= 6 ) {
+                System.out.println("Moeda para conversão: " + moedaBase);
+                System.out.println("Moeda convertida: " + moedaDestino);
+                System.out.print("Digite o valor para conversão: ");
+                valor = scanner.nextDouble();
+
+                try {
+                    double taxa = servico.obterTaxa(moedaBase, moedaDestino);
+                    resultado = valor * taxa;
+                    System.out.println("Resultado: " + String.format("%.2f", resultado));
+                } catch (RuntimeException e) {
+                    System.out.println("Erro ao obter taxa de câmbio. Tente novamente.");
+                }
             }
 
         } while (opcao != 0);

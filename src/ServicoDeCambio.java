@@ -9,8 +9,8 @@ public class ServicoDeCambio {
 
     private static final String api_key = "3ba8f18b0202289fa3b1eeb2";
 
-    public double obterTaxa(String moedaBase, String moedaDestino) {
-        String url = "https://v6.exchangerate-api.com/v6/" + api_key + "/latest/" +  moedaBase;
+    public double obterTaxa(CodigoMoeda moedaBase, CodigoMoeda moedaDestino) {
+        String url = "https://v6.exchangerate-api.com/v6/" + api_key + "/latest/" +  moedaBase.name();
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -26,7 +26,7 @@ public class ServicoDeCambio {
 
                 double taxa = resposta 
                         .getConversionRates()
-                        .get(moedaDestino);
+                        .get(moedaDestino.name());
 
             //System.out.println("Taxa USD -> BRL: " + taxa);
             return taxa;
